@@ -1,5 +1,17 @@
 import type { SiteConfig } from "@/lib/site.types";
 
+function getSiteUrl(): string {
+  const env = process.env;
+  if (env.SITE_URL) return env.SITE_URL;
+  if (env.VERCEL_PROJECT_PRODUCTION_URL)
+    return `https://${env.VERCEL_PROJECT_PRODUCTION_URL}`;
+  if (env.NETLIFY === "true" && env.URL) return env.URL;
+  if (env.COOLIFY_URL) return env.COOLIFY_URL.split(",")[0].trim();
+  if (env.VERCEL_URL) return `https://${env.VERCEL_URL}`;
+  if (env.CF_PAGES_URL) return env.CF_PAGES_URL;
+  return "http://localhost:4321";
+}
+
 const contactEmail = "hello@example.com";
 
 /**
@@ -9,7 +21,7 @@ const contactEmail = "hello@example.com";
  * homepage for the target app. Optional evidence stays absent until verified.
  */
 export const site: SiteConfig = {
-  siteURL: "http://localhost:4321",
+  siteURL: getSiteUrl(),
   name: "Orbit",
   description:
     "A calm, fictional daily planning app used to demonstrate this app landing-page template.",

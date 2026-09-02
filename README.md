@@ -47,7 +47,7 @@ Manage the background server with `pnpm astro dev status`, `pnpm astro dev logs`
 
 ## Deploy the generated site
 
-After initialization, set `siteURL` in `src/site.config.ts` to the site's final HTTPS origin, then build it:
+The site detects its URL on Vercel, Netlify, Cloudflare Pages, and Coolify. Set `SITE_URL` in your host’s build environment to use a specific public URL, then build:
 
 ```sh
 pnpm check

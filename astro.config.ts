@@ -20,5 +20,21 @@ export default defineConfig({
     },
   },
 
-  integrations: [mdx(), react(), sitemap()],
+  integrations: [
+    mdx(),
+    react(),
+    sitemap(),
+    {
+      name: "site-url",
+      hooks: {
+        "astro:config:setup": ({ command, logger }) => {
+          if (command === "build" && site.siteURL === "http://localhost:4321") {
+            logger.warn(
+              "Building with http://localhost:4321. Set SITE_URL or expose your host's URL variable during the build so canonical, Open Graph, feed, and sitemap URLs are public.",
+            );
+          }
+        },
+      },
+    },
+  ],
 });
