@@ -1,0 +1,61 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import { formatPageTitle } from "@/lib/page-title";
+import { site } from "@/site.config";
+
+Astro.response.status = 404;
+
+const listedHrefs = new Set(
+  [...(site.nav ?? []), ...(site.footer ?? [])].map((link) => link.href),
+);
+
+const links = [
+  { href: "/", label: "Home" },
+  { href: site.downloadURL ?? "/#download", label: "Download" },
+  ...(listedHrefs.has("/blog/") || listedHrefs.has("/blog")
+    ? [{ href: "/blog/", label: "Blog" }]
+    : []),
+  ...(listedHrefs.has("/changelog/") || listedHrefs.has("/changelog")
+    ? [{ href: "/changelog/", label: "Changelog" }]
+    : []),
+  { href: "/sitemap-index.xml", label: "Sitemap" },
+  { href: "/llms.txt", label: "Machine-readable site guide" },
+];
+---
+
+<Layout
+  title={formatPageTitle("Page not found")}
+  description={`This page does not exist on ${site.name}.`}
+>
+  <main class="xs:py-20 mx-auto w-full max-w-3xl px-5 py-7">
+    <p class="text-label-secondary text-sm">404</p>
+    <h1
+      class="mt-1 text-3xl leading-tight font-semibold text-balance sm:text-4xl"
+    >
+      Page not found
+    </h1>
+    <p
+      class="text-label-secondary mt-2 max-w-prose text-lg leading-relaxed text-pretty"
+    >
+      This page does not exist.
+    </p>
+
+    <nav class="border-border mt-8 border-t pt-6" aria-label="Useful links">
+      <p class="text-sm font-medium">Where to look next</p>
+      <ul class="text-label-secondary mt-3 list-disc space-y-2 pl-5 text-sm">
+        {
+          links.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                class="decoration-label/25 hover:text-label hover:decoration-label text-inherit underline underline-offset-4 transition-colors"
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </main>
+</Layout>

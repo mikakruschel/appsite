@@ -1,0 +1,25 @@
+---
+import type { ThemePalette } from "@/lib/site.types";
+import { site } from "@/site.config";
+
+function paletteCss(p: ThemePalette) {
+  return `--background: ${p.background};
+  --label: ${p.label};
+  --card: ${p.card};
+  --label-secondary: ${p.labelSecondary};
+  --accent: ${p.accent};
+  --accent-label: ${p.accentLabel}`;
+}
+
+const css = `:root {
+  ${paletteCss(site.theme.light)}
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+  ${paletteCss(site.theme.dark)}
+  }
+}`;
+---
+
+<style is:inline set:html={css}></style>

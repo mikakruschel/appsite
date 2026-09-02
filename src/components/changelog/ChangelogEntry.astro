@@ -1,0 +1,41 @@
+---
+import MarkdownProse from "@/components/common/MarkdownProse.astro";
+import type { CollectionEntry } from "astro:content";
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+
+interface Props {
+  release: CollectionEntry<"changelog">;
+  Content: AstroComponentFactory;
+}
+
+const { release, Content } = Astro.props;
+const { version, date } = release.data;
+const anchor = version.replace(/\./g, "-");
+
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<section
+  id={anchor}
+  class="border-border scroll-mt-28 border-b py-8 first:pt-0 last:border-b-0"
+  aria-labelledby={`changelog-${anchor}`}
+>
+  <header class="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
+    <h2
+      id={`changelog-${anchor}`}
+      class="text-xl leading-tight font-semibold tracking-tight"
+    >
+      {version}
+    </h2>
+    <time datetime={date.toISOString()} class="text-label-secondary text-sm">
+      {formattedDate}
+    </time>
+  </header>
+  <MarkdownProse>
+    <Content />
+  </MarkdownProse>
+</section>

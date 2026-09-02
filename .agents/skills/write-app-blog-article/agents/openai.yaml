@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write App Blog Article"
+  short_description: "Write evidence-backed articles with human voice"
+  default_prompt: "Use $write-app-blog-article to draft a focused article for this initialized app landing page."

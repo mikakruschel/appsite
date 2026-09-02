@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research App Website"
+  short_description: "Research an existing app site with citations"
+  default_prompt: "Use $research-app-website to research this app website and stage verified findings for the landing page."

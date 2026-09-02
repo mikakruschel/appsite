@@ -1,0 +1,40 @@
+---
+import { Image } from "astro:assets";
+import icon from "@/assets/app/placeholder-app-icon.png";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  alt?: string;
+  size?: "nav" | "hero" | "sm" | "md" | "lg" | "xl";
+  class?: string;
+  priority?: boolean;
+}
+
+const {
+  alt = "App icon",
+  size = "md",
+  class: className = "",
+  priority = false,
+} = Astro.props;
+
+const sizes = {
+  nav: { class: "size-8 shrink-0 object-contain", px: 32 },
+  hero: { class: "size-[70px] shrink-0 object-contain", px: 70 },
+  sm: { class: "size-8 shrink-0 object-contain", px: 32 },
+  md: { class: "size-12 shrink-0 object-contain", px: 48 },
+  lg: { class: "size-16 shrink-0 object-contain", px: 64 },
+  xl: { class: "size-24 shrink-0 object-contain", px: 96 },
+} as const;
+
+const { class: sizeClass, px } = sizes[size];
+---
+
+<Image
+  src={icon}
+  alt={alt}
+  width={px}
+  height={px}
+  densities={[1, 2]}
+  priority={priority}
+  class={cn(sizeClass, className)}
+/>

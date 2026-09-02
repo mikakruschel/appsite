@@ -1,0 +1,94 @@
+---
+import type { RssFeed } from "@/lib/rss";
+import { buildApplicationSchema } from "@/lib/structured-data";
+import { site } from "@/site.config";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  icon: string;
+  feeds?: RssFeed[];
+  ogType?: "website" | "article";
+  publishedTime?: Date;
+}
+
+const {
+  title = site.name,
+  description = site.description,
+  image,
+  icon,
+  feeds = [],
+  ogType = "website",
+  publishedTime,
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const ogImageURL = image ?? new URL("/og.png", Astro.site).href;
+
+const applicationSchema =
+  Astro.url.pathname === "/" ? buildApplicationSchema(site) : undefined;
+---
+
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta
+  name="theme-color"
+  content={site.theme.light.background}
+  media="(prefers-color-scheme: light)"
+/>
+<meta
+  name="theme-color"
+  content={site.theme.dark.background}
+  media="(prefers-color-scheme: dark)"
+/>
+{
+  site.appStoreID && (
+    <meta name="apple-itunes-app" content={`app-id=${site.appStoreID}`} />
+  )
+}
+{description && <meta name="description" content={description} />}
+<link rel="canonical" href={canonicalURL} />
+<link rel="sitemap" href="/sitemap-index.xml" />
+<meta property="og:type" content={ogType} />
+{
+  publishedTime && (
+    <meta
+      property="article:published_time"
+      content={publishedTime.toISOString()}
+    />
+  )
+}
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:site_name" content={site.name} />
+<meta property="og:title" content={title} />
+{description && <meta property="og:description" content={description} />}
+<meta property="og:image" content={ogImageURL} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+{description && <meta name="twitter:description" content={description} />}
+<meta name="twitter:image" content={ogImageURL} />
+<link rel="icon" type="image/png" href={icon} sizes="512x512" />
+<link rel="apple-touch-icon" href={icon} />
+{
+  feeds.map((feed) => (
+    <link
+      rel="alternate"
+      type="application/rss+xml"
+      title={feed.title}
+      href={feed.href}
+    />
+  ))
+}
+<title>{title}</title>
+{
+  applicationSchema && (
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(applicationSchema)}
+    />
+  )
+}

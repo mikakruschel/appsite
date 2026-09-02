@@ -1,0 +1,4 @@
+interface:
+  display_name: "Critique App Landing Page"
+  short_description: "Audit an app landing page and rank fixes"
+  default_prompt: "Use $critique-app-landing-page to audit this completed app landing page and return evidence-backed, actionable improvements."

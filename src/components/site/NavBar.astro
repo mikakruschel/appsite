@@ -1,0 +1,138 @@
+---
+import AppIcon from "@/components/media/AppIcon.astro";
+import DownloadButton from "@/components/common/DownloadButton.astro";
+import type { NavLink } from "@/lib/site.types";
+
+function isNavLinkActive(href: string, currentPath: string) {
+  const normalizedPath = currentPath.replace(/\/$/, "") || "/";
+
+  if (href === "/blog/" || href === "/blog") {
+    return normalizedPath === "/blog" || normalizedPath.startsWith("/blog/");
+  }
+
+  if (href === "/changelog/" || href === "/changelog") {
+    return (
+      normalizedPath === "/changelog" ||
+      normalizedPath.startsWith("/changelog/")
+    );
+  }
+
+  if (href.startsWith("/#") || href.startsWith("#")) {
+    return normalizedPath === "/";
+  }
+
+  const normalizedHref = href.replace(/\/$/, "") || "/";
+  return normalizedHref === normalizedPath;
+}
+
+interface Props {
+  appName: string;
+  downloadUrl?: string;
+  navLinks?: NavLink[];
+}
+
+const { appName, downloadUrl, navLinks = [] } = Astro.props;
+const currentPath = Astro.url.pathname;
+---
+
+<div
+  class="pointer-events-none fixed inset-x-0 top-0 isolate z-50 flex transform-[translate3d(0,0,0)] justify-center px-5 pt-2 will-change-transform backface-hidden md:pt-5"
+>
+  <nav
+    data-nav
+    class="navbar-shadow bg-glass supports-backdrop-filter:bg-glass-blur ring-label/5 dark:ring-label/10 pointer-events-auto flex w-fit max-w-full min-w-0 items-center gap-5 rounded-full py-2 pr-2 pl-3.5 ring-1 backdrop-blur-xl md:gap-10 md:py-3 md:pr-3 md:pl-5"
+    aria-label="Site"
+  >
+    <a
+      href="/"
+      aria-label={`Go to ${appName} home`}
+      class="flex shrink-0 items-center gap-2.5"
+    >
+      <AppIcon alt={`${appName} app icon`} size="nav" priority />
+      <span class="text-base leading-none font-bold">{appName}</span>
+    </a>
+
+    {
+      navLinks.length > 0 && (
+        <div class="nav-expandable flex shrink-0 items-center gap-3 md:gap-4">
+          {navLinks.map((link) => {
+            const isActive = isNavLinkActive(link.href, currentPath);
+
+            return (
+              <a
+                href={link.href}
+                class:list={[
+                  "flex h-9 items-center text-[15px] leading-none font-medium transition-colors",
+                  isActive
+                    ? "text-label"
+                    : "text-label-secondary hover:text-label",
+                ]}
+                aria-current={isActive ? "page" : undefined}
+              >
+                {link.label}
+              </a>
+            );
+          })}
+        </div>
+      )
+    }
+
+    {
+      downloadUrl && (
+        <DownloadButton href={downloadUrl} size="sm" logo={false} />
+      )
+    }
+  </nav>
+</div>
+
+<style>
+  .navbar-shadow {
+    box-shadow: var(--shadow-elev-sm);
+  }
+
+  @media (max-width: 767px) {
+    [data-nav]:not([data-nav-ready]) {
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    [data-nav]:not([data-nav-ready]) .nav-expandable {
+      display: none;
+    }
+  }
+
+  [data-nav][data-collapsed="true"] {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  [data-nav][data-collapsed="true"] .nav-expandable {
+    display: none;
+  }
+</style>
+
+<script is:inline>
+  function updateNavCollapse() {
+    var nav = document.querySelector("[data-nav]");
+    if (!nav) return;
+
+    nav.dataset.collapsed = "false";
+    nav.dataset.collapsed =
+      nav.scrollWidth > nav.clientWidth + 1 ? "true" : "false";
+    nav.dataset.navReady = "true";
+  }
+
+  updateNavCollapse();
+  window.addEventListener("resize", updateNavCollapse);
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(updateNavCollapse);
+  }
+
+  var nav = document.querySelector("[data-nav]");
+  if (nav && "ResizeObserver" in window) {
+    new ResizeObserver(updateNavCollapse).observe(nav);
+    if (nav.parentElement) {
+      new ResizeObserver(updateNavCollapse).observe(nav.parentElement);
+    }
+  }
+</script>

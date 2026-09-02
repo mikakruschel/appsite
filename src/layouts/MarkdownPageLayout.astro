@@ -1,0 +1,38 @@
+---
+import MarkdownProse from "@/components/common/MarkdownProse.astro";
+import Layout from "@/layouts/Layout.astro";
+import { formatPageTitle } from "@/lib/page-title";
+import { site } from "@/site.config";
+
+interface Props {
+  frontmatter?: {
+    title?: string;
+    description?: string;
+    updated?: string;
+  };
+}
+
+const {
+  title = site.name,
+  description,
+  updated,
+} = Astro.props.frontmatter ?? {};
+---
+
+<Layout title={formatPageTitle(title)} description={description}>
+  <main class="xs:py-20 mx-auto w-full max-w-5xl px-5 py-7">
+    <article>
+      <MarkdownProse>
+        <h1>{title}</h1>
+        <slot />
+        {
+          updated && (
+            <p class="text-label-secondary mt-4 text-sm">
+              Last updated: {updated}
+            </p>
+          )
+        }
+      </MarkdownProse>
+    </article>
+  </main>
+</Layout>

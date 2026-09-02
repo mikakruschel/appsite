@@ -1,0 +1,4 @@
+interface:
+  display_name: "Resolve App Brand Color"
+  short_description: "Choose the semantic landing-page accent"
+  default_prompt: "Use $resolve-app-brand-color to inspect the available homepage and/or App Store icon, then return the landing-page accent."

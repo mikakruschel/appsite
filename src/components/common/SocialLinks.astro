@@ -1,0 +1,142 @@
+---
+import type { SocialLink, SocialPlatform } from "@/lib/site.types";
+import RedditIcon from "@/assets/icons/social/reddit.svg";
+import {
+  Bluesky,
+  Discord,
+  Github,
+  Instagram,
+  Mastodon,
+  Threads,
+  X,
+  Youtube,
+} from "simple-icons-astro";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  links: SocialLink[];
+  class?: string;
+  grouped?: boolean;
+}
+
+const { links, class: className, grouped = false } = Astro.props;
+
+const iconClass = "text-label-secondary";
+const iconSize = 18;
+const iconStyle = `width: ${iconSize}px; height: ${iconSize}px;`;
+
+type SimpleIcon = typeof Github;
+
+const platformConfig: Record<
+  SocialPlatform,
+  {
+    label: string;
+    simple?: SimpleIcon;
+    asset?: typeof RedditIcon;
+  }
+> = {
+  mastodon: { simple: Mastodon, label: "Mastodon" },
+  twitter: { simple: X, label: "X (Twitter)" },
+  bluesky: { simple: Bluesky, label: "Bluesky" },
+  reddit: { asset: RedditIcon, label: "Reddit" },
+  instagram: { simple: Instagram, label: "Instagram" },
+  threads: { simple: Threads, label: "Threads" },
+  youtube: { simple: Youtube, label: "YouTube" },
+  discord: { simple: Discord, label: "Discord" },
+  github: { simple: Github, label: "GitHub" },
+};
+---
+
+{
+  links.length > 0 &&
+    (grouped ? (
+      <div
+        role="group"
+        aria-label="Social links"
+        class={cn(
+          "flex w-full max-w-full min-w-0 flex-row flex-wrap items-center justify-center gap-x-3.5 gap-y-2",
+          className,
+        )}
+      >
+        {links.map(({ platform, href, label }) => {
+          const {
+            simple,
+            asset,
+            label: defaultLabel,
+          } = platformConfig[platform];
+          const AssetIcon = asset;
+          const SimpleIcon = simple;
+
+          return (
+            <a
+              href={href}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label={label ?? defaultLabel}
+              class="inline-flex size-5 items-center justify-center transition-opacity hover:opacity-50"
+            >
+              {AssetIcon ? (
+                <AssetIcon
+                  class={iconClass}
+                  style={iconStyle}
+                  aria-hidden="true"
+                  focusable="false"
+                />
+              ) : (
+                SimpleIcon && (
+                  <SimpleIcon
+                    class={iconClass}
+                    fill="currentColor"
+                    style={iconStyle}
+                  />
+                )
+              )}
+            </a>
+          );
+        })}
+      </div>
+    ) : (
+      <nav aria-label="Social links" class={cn("flex items-center", className)}>
+        <ul class="flex flex-wrap items-center gap-x-3.5 gap-y-2">
+          {links.map(({ platform, href, label }) => {
+            const {
+              simple,
+              asset,
+              label: defaultLabel,
+            } = platformConfig[platform];
+            const AssetIcon = asset;
+            const SimpleIcon = simple;
+
+            return (
+              <li class="flex items-center">
+                <a
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label ?? defaultLabel}
+                  class="inline-flex size-5 items-center justify-center transition-opacity hover:opacity-50"
+                >
+                  {AssetIcon ? (
+                    <AssetIcon
+                      class={iconClass}
+                      style={iconStyle}
+                      aria-hidden="true"
+                      focusable="false"
+                    />
+                  ) : (
+                    SimpleIcon && (
+                      <SimpleIcon
+                        class={iconClass}
+                        fill="currentColor"
+                        style={iconStyle}
+                      />
+                    )
+                  )}
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+    ))
+}

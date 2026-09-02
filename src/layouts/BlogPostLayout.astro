@@ -1,0 +1,109 @@
+---
+import { getImage, Image } from "astro:assets";
+import MarkdownProse from "@/components/common/MarkdownProse.astro";
+import RssSubscribeLink from "@/components/common/RssSubscribeLink.astro";
+import Layout from "@/layouts/Layout.astro";
+import { formatPageTitle } from "@/lib/page-title";
+import { blogRssFeed } from "@/lib/rss";
+import { buildArticleSchema } from "@/lib/structured-data";
+import { site } from "@/site.config";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { title, description, date, coverImage } = post.data;
+
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
+const ogImage = coverImage
+  ? new URL(
+      (
+        await getImage({
+          src: coverImage,
+          width: 1200,
+          height: 630,
+          fit: "cover",
+        })
+      ).src,
+      Astro.site,
+    ).href
+  : new URL(`/blog/og/${post.id}.png`, Astro.site).href;
+
+const articleUrl = new URL(`/blog/${post.id}/`, Astro.site).href;
+const articleSchema = buildArticleSchema({
+  headline: title,
+  description,
+  datePublished: date,
+  url: articleUrl,
+  image: ogImage,
+  author: {
+    name: site.developer ?? site.name,
+    url: site.developerWebsite,
+  },
+  publisher: {
+    name: site.name,
+    url: site.siteURL,
+  },
+});
+---
+
+<Layout
+  title={formatPageTitle(title)}
+  description={description}
+  image={ogImage}
+  feeds={[blogRssFeed]}
+  ogType="article"
+  publishedTime={date}
+>
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(articleSchema)}
+  />
+  <main class="xs:py-20 mx-auto w-full max-w-3xl px-5 py-7">
+    <article>
+      <header class="mb-8 space-y-4">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <p class="text-label-secondary text-sm">
+            <time datetime={date.toISOString()}>{formattedDate}</time>
+          </p>
+          <RssSubscribeLink feed={blogRssFeed} variant="plain" />
+        </div>
+        <h1
+          class="text-3xl leading-tight font-semibold text-balance sm:text-4xl"
+        >
+          {title}
+        </h1>
+        <p class="text-label-secondary text-lg leading-relaxed text-pretty">
+          {description}
+        </p>
+        {
+          coverImage && (
+            <div class="rounded-card ring-label/5 dark:ring-label/10 overflow-hidden ring-1">
+              <Image
+                src={coverImage}
+                alt={title}
+                width={coverImage.width}
+                height={coverImage.height}
+                densities={[1, 2]}
+                loading="eager"
+                decoding="async"
+                class="h-auto w-full"
+              />
+            </div>
+          )
+        }
+      </header>
+      <MarkdownProse>
+        <slot />
+      </MarkdownProse>
+    </article>
+  </main>
+</Layout>

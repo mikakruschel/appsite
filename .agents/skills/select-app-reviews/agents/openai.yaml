@@ -1,0 +1,4 @@
+interface:
+  display_name: "Select App Reviews"
+  short_description: "Shortlist verified App Store testimonials"
+  default_prompt: "Use $select-app-reviews to shortlist verified App Store reviews for the landing page."

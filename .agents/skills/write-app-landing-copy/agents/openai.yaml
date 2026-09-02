@@ -1,0 +1,4 @@
+interface:
+  display_name: "Write App Landing Copy"
+  short_description: "Draft verified app landing-page copy"
+  default_prompt: "Use $write-app-landing-copy to draft app-input/site-content.yaml from the completed APP_BRIEF.md."

@@ -1,0 +1,90 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import type { AstroComponentFactory } from "astro/runtime/server/index.js";
+import { buttonVariants } from "@/components/ui/button";
+import AppleLogo from "@/assets/icons/apple.logo.svg";
+import { cn } from "@/lib/utils";
+
+type Logo = ImageMetadata | AstroComponentFactory | string | false | null;
+
+interface Props {
+  /** Omit for an unreleased app to render a non-interactive coming-soon badge. */
+  href?: string;
+  /** Label used when `href` is available. */
+  label?: string;
+  /** Label used when `href` is unavailable. */
+  unavailableLabel?: string;
+  size?: "sm" | "lg";
+  variant?: "default" | "secondary";
+  /** Image asset, SVG component, URL, or `false`/`null` to hide. Defaults to the Apple logo. */
+  logo?: Logo;
+  class?: string;
+}
+
+const {
+  href,
+  label = "Download",
+  unavailableLabel = "Soon on the App Store",
+  size = "lg",
+  variant = "default",
+  logo = AppleLogo,
+  class: className = "",
+} = Astro.props;
+
+const visibleLabel = href ? label : unavailableLabel;
+
+const logoClass = "h-[18px] w-auto shrink-0";
+
+function isImageMetadata(value: Logo): value is ImageMetadata {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "width" in value &&
+    "height" in value
+  );
+}
+
+const imageLogo = isImageMetadata(logo) ? logo : null;
+const urlLogo = typeof logo === "string" ? logo : null;
+const SvgLogo =
+  logo && typeof logo === "function" ? (logo as AstroComponentFactory) : null;
+
+const sizes = {
+  sm: "h-10 rounded-full px-[15px] text-[15px] font-medium",
+  lg: "h-auto gap-2 rounded-full px-5 py-2.5 text-lg font-medium",
+};
+
+const Tag = href ? "a" : "span";
+---
+
+<Tag
+  href={href}
+  aria-disabled={href ? undefined : "true"}
+  class={cn(
+    buttonVariants({ variant }),
+    sizes[size],
+    !href && "cursor-not-allowed opacity-75 hover:scale-100",
+    className,
+  )}
+>
+  {
+    imageLogo && (
+      <Image
+        src={imageLogo}
+        alt=""
+        height={18}
+        widths={[18, 36]}
+        class={logoClass}
+        aria-hidden="true"
+      />
+    )
+  }
+  {urlLogo && <img src={urlLogo} alt="" class={logoClass} aria-hidden="true" />}
+  {
+    SvgLogo && (
+      <SvgLogo class={logoClass} aria-hidden="true" focusable="false" />
+    )
+  }
+  {visibleLabel}
+</Tag>

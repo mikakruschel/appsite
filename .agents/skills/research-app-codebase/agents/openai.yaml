@@ -1,0 +1,4 @@
+interface:
+  display_name: "Research App Codebase"
+  short_description: "Find cited app features and assets in source code"
+  default_prompt: "Use $research-app-codebase to inspect this app source directory and stage cited findings for the landing page."

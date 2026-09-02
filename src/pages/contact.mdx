@@ -1,0 +1,12 @@
+---
+layout: ../layouts/MarkdownPageLayout.astro
+title: Contact
+description: Contact and support information.
+---
+
+import { site } from "@/site.config";
+
+export const appName = site.name;
+export const contactEmail = site.contactEmail;
+
+Have questions or concerns about {appName}? Contact me at <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.

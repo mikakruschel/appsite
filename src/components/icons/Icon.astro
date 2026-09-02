@@ -1,0 +1,23 @@
+---
+import { cn } from "@/lib/utils";
+import { iconViewBoxes, type IconId } from "@/components/icons/sprite-ids";
+
+interface Props {
+  id: IconId;
+  class?: string;
+  style?: string;
+  label?: string;
+}
+
+const { id, class: className, style, label } = Astro.props;
+---
+
+<svg
+  class={cn(className)}
+  viewBox={iconViewBoxes[id]}
+  style={style}
+  aria-hidden={label ? undefined : true}
+  aria-label={label}
+>
+  <use href={`#${id}`}></use>
+</svg>

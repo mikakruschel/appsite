@@ -1,0 +1,4 @@
+interface:
+  display_name: "Maintain App Landing Page"
+  short_description: "Routine updates on an initialized app site"
+  default_prompt: "Use $maintain-app-landing-page to apply routine updates to this initialized landing page."

@@ -1,0 +1,93 @@
+metadata:
+  pageTitle: Daymark, plan tasks and appointments together
+  description: See tasks and appointments in one daily plan across iPhone, iPad, and Mac.
+homepage:
+  hero:
+    layout: horizontal
+    headline: Make a plan that fits the day.
+    tagline: Daymark brings tasks and appointments together so you can see what fits before the day gets busy.
+    action:
+      kind: app-store
+      label: Download on the App Store
+      url: https://apps.apple.com/app/daymark/id1234567890
+    media:
+      kind: image
+      source: src/assets/screenshots/daymark-today.png
+      alt: Daymark Today view showing tasks beside calendar appointments
+  featureCards:
+    heading: Plan around the time you actually have
+    items:
+      - title: See the whole day
+        description: See tasks and appointments together, then decide what fits today.
+        image:
+          source: src/assets/screenshots/daymark-today.png
+          preset: focus-top
+      - title: Capture tasks quickly
+        description: Add a task when it occurs to you and schedule it when you are ready.
+        image:
+          source: src/assets/screenshots/daymark-capture.png
+          preset: inset
+      - title: Continue on another device
+        description: Keep the same plan available on iPhone, iPad, and Mac.
+        image:
+          source: src/assets/screenshots/daymark-mac.png
+          preset: inset
+  valueCards:
+    items:
+      - title: Available offline
+        description: Review and update the current plan without an internet connection.
+        icon: WifiOff
+      - title: Made for Apple devices
+        description: Use the same familiar controls across iPhone, iPad, and Mac.
+        icon: Laptop
+      - title: No advertising profile
+        description: Daymark does not build an advertising profile from planning activity.
+        icon: ShieldCheck
+  capabilities:
+    heading: Keep the details of the day close at hand
+    items:
+      - title: Reminders
+        description: Receive a notification when a scheduled task is due.
+        icon: Bell
+      - title: Search
+        description: Find a task by its title or notes.
+        icon: Search
+      - title: Widgets
+        description: Check the next items without opening the app.
+        icon: PanelsTopLeft
+  proof:
+    heading: What Daymark users say
+    testimonials:
+      items:
+        - quote: I can finally see appointments and tasks together without maintaining a complicated planning system each day.
+          author: Maya R.
+        - quote: Daymark makes it obvious when I have planned more work than the day can hold.
+          author: Jonas K.
+        - quote: Adding a task is quick, and I can decide where it belongs when I have time.
+          author: Elena P.
+        - quote: The daily view gives me enough structure without turning every task into a project of its own.
+          author: Noah T.
+        - quote: I check the widget each morning and know what is coming up before opening the app.
+          author: Priya S.
+        - quote: Moving between my phone and Mac works well for me when plans change during the day.
+          author: Leo M.
+        - quote: Search is fast enough that I no longer worry about where I filed a task.
+          author: Avery C.
+        - quote: Offline access matters on my commute, and my current plan is always there when I need it.
+          author: Samira D.
+    rating:
+      average: 4.8
+      count: 312
+  faq:
+    heading: Good to know
+    items:
+      - question: Which devices does Daymark support?
+        answer: Daymark is available for iPhone, iPad, and Mac.
+      - question: Can I use Daymark offline?
+        answer: Yes. The current plan remains available without an internet connection.
+      - question: How much does Daymark cost?
+        answer: Daymark is a paid download for $4.99 in the United States App Store.
+  closingCta:
+    headline: Put today into one plan.
+    buttonLabel: Download Daymark
+    footnote: Available for iPhone, iPad, and Mac.

@@ -1,0 +1,46 @@
+---
+import { cn } from "@/lib/utils";
+import type { RssFeed } from "@/lib/rss";
+
+interface Props {
+  feed: RssFeed;
+  variant?: "pill" | "plain";
+  class?: string;
+}
+
+const { feed, variant = "pill", class: className } = Astro.props;
+
+const variantStyles = {
+  pill: "border-glass-border bg-glass text-label-secondary hover:text-label hover:border-border inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3 py-1.5 text-sm font-medium transition-colors",
+  plain:
+    "text-label-secondary hover:text-label hover:underline underline-offset-3 text-sm transition-colors",
+};
+---
+
+<a
+  href={feed.href}
+  type="application/rss+xml"
+  class={cn(variantStyles[variant], className)}
+>
+  {
+    variant === "pill" && (
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="16"
+        height="16"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="M4 11a9 9 0 0 1 9 9" />
+        <path d="M4 4a16 16 0 0 1 16 16" />
+        <circle cx="5" cy="19" r="1" />
+      </svg>
+    )
+  }
+  Subscribe via RSS
+</a>

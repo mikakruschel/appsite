@@ -1,0 +1,4 @@
+interface:
+  display_name: "Build App Landing Page"
+  short_description: "Build from a verified brief with edited copy"
+  default_prompt: "Use $build-app-landing-page to build this site from the completed APP_BRIEF.md and edited app-input/site-content.yaml."

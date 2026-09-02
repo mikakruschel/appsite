@@ -1,0 +1,134 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+import AppIcon from "@/components/media/AppIcon.astro";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  headline: string;
+  tagline: string;
+  image?: ImageMetadata;
+  /** Alternative text for image media or the accessible label for video media. */
+  alt?: string;
+  /** Imported video URL (e.g. `import clip from "@/assets/hero.mp4"`). Autoplays muted and looping unless reduced motion is preferred. */
+  video?: string;
+  /** Optional imported poster image for video media. */
+  poster?: ImageMetadata;
+  /** Side-by-side on large screens; always stacked when "vertical". */
+  layout?: "horizontal" | "vertical";
+}
+
+const {
+  headline,
+  tagline,
+  image,
+  alt = "",
+  video,
+  poster,
+  layout = "horizontal",
+} = Astro.props;
+
+const hasMedia = Boolean(image || video);
+const sideBySide = layout === "horizontal" && hasMedia;
+const videoLabel = alt.trim() || `${headline} app demonstration`;
+
+const mediaClass =
+  "h-auto max-h-[min(600px,70vh)] w-full max-w-5xl object-contain";
+
+const videoFrameClass =
+  "max-h-[min(600px,70vh)] max-w-5xl overflow-hidden rounded-3xl w-fit";
+
+const videoClass =
+  "hero-video block h-auto max-h-[min(600px,70vh)] w-auto max-w-5xl";
+---
+
+<section class="xs:py-20 px-5 py-7">
+  <div
+    class={cn(
+      "flex w-full min-w-0 flex-col items-center justify-center gap-7 xs:gap-15",
+      sideBySide && "lg:flex-row",
+    )}
+  >
+    <div
+      class={cn(
+        "flex max-w-md shrink-0 flex-col items-center gap-4 xs:gap-8 text-center",
+        sideBySide && "lg:items-start lg:text-left",
+      )}
+    >
+      <AppIcon size="hero" priority />
+
+      <h1 class="xs:text-5xl text-4xl font-bold tracking-tight">
+        {headline}
+      </h1>
+
+      <p
+        class="xs:text-xl text-label-secondary text-lg leading-tight font-medium"
+      >
+        {tagline}
+      </p>
+
+      <div
+        class={cn(
+          "flex flex-wrap items-center justify-center gap-3",
+          sideBySide && "lg:justify-start",
+        )}
+      >
+        <slot name="actions" />
+      </div>
+    </div>
+
+    {
+      hasMedia && (
+        <div
+          class={cn(
+            "flex w-full min-w-0 items-center justify-center",
+            sideBySide && "lg:flex-1",
+          )}
+        >
+          {video ? (
+            <div class={videoFrameClass}>
+              <video
+                src={video}
+                muted
+                loop
+                playsinline
+                preload="auto"
+                poster={poster?.src}
+                aria-label={videoLabel}
+                class={videoClass}
+              />
+            </div>
+          ) : (
+            image && (
+              <Image
+                src={image}
+                alt={alt}
+                priority
+                widths={[640, 960, 1280, 1536]}
+                sizes="(max-width: 1024px) 100vw, 1024px"
+                class={mediaClass}
+              />
+            )
+          )}
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<script is:inline>
+  document.querySelectorAll(".hero-video").forEach((element) => {
+    const video = /** @type {HTMLVideoElement} */ (element);
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+
+    if (reducedMotion) {
+      video.controls = true;
+      return;
+    }
+
+    video.autoplay = true;
+    video.play().catch(() => {});
+  });
+</script>

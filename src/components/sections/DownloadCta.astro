@@ -1,0 +1,34 @@
+---
+import AppIcon from "@/components/media/AppIcon.astro";
+import DownloadButton from "@/components/common/DownloadButton.astro";
+
+interface Props {
+  href?: string;
+  appName: string;
+  headline: string;
+  buttonLabel?: string;
+  footnote?: string;
+}
+
+const { href, appName, headline, buttonLabel, footnote } = Astro.props;
+---
+
+<section
+  class="mx-auto flex w-full max-w-200 flex-col items-center gap-6 px-8 pb-10 text-center"
+>
+  <AppIcon alt={`${appName} app icon`} size="lg" />
+
+  <h2 class="text-label text-3xl leading-tight font-bold tracking-tight">
+    {headline}
+  </h2>
+
+  <div class="flex flex-col items-center gap-2.5">
+    <DownloadButton href={href} size="sm" label={buttonLabel} />
+
+    {
+      footnote && (
+        <p class="text-label-secondary text-xs leading-relaxed">{footnote}</p>
+      )
+    }
+  </div>
+</section>

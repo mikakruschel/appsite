@@ -1,0 +1,63 @@
+---
+layout: ../layouts/MarkdownPageLayout.astro
+title: Terms of Use
+description: Terms of use.
+---
+
+import { site } from "@/site.config";
+
+export const appName = site.name;
+export const developer = site.developer ?? site.name;
+export const contactEmail = site.contactEmail;
+
+These terms govern your use of {appName} and related services offered by {developer} ("I", "me", or "we"). They work together with the [Privacy Policy](/privacy/). If you do not agree, do not use the app.
+
+## App Store
+
+If you download or purchase {appName} through Apple's App Store, [Apple's Licensed Application End User License Agreement](https://www.apple.com/legal/internet-services/itunes/dev/stdeula/) also applies, except where these terms are more specific.
+
+## License
+
+I grant you a personal, non-transferable license to use {appName} for your own purposes, subject to the store or purchase terms under which you obtained it. You may not sell, rent, sublicense, or redistribute the app, and you may not reverse-engineer or modify it except where applicable law allows.
+
+## Bugs and reliability
+
+Software can fail. {appName} is provided as available, without a guarantee of uninterrupted or error-free operation. Back up important data. I am not liable for ordinary bugs, downtime, or data loss beyond what applicable law requires.
+
+## Refunds
+
+App Store purchases and refunds are handled by Apple. You can request help at [reportaproblem.apple.com](https://reportaproblem.apple.com). If something is wrong with the app,{" "}
+{contactEmail ? (
+
+  <>
+    contacting me at{" "}
+    <a href={`mailto:${contactEmail}`}>{contactEmail}</a> first is appreciated so I
+    can try to fix it.
+  </>
+) : (
+  <>contacting me first is appreciated so I can try to fix it.</>
+)}
+
+## Support
+
+{contactEmail ? (
+
+  <>
+    I read every message sent to <a href={`mailto:${contactEmail}`}>{contactEmail}</a>.
+    As a small team / solo developer, I may not answer every one, but I aim to reply
+    within a reasonable time.
+  </>
+) : (
+  <>
+    I read every support message I receive. As a small team / solo developer, I may
+    not answer every one, but I aim to reply within a reasonable time.
+  </>
+)}
+
+## Intellectual property
+
+The app, website, branding, and content are owned by {developer} or its licensors. Do not copy or reuse them without permission.
+
+## Changes
+
+I may update these terms at any time by posting a new version here. Continued use of the app after an update means you accept the revised terms, to the extent permitted by law.

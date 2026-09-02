@@ -1,0 +1,219 @@
+---
+import Layout from "@/layouts/Layout.astro";
+import DownloadCta from "@/components/sections/DownloadCta.astro";
+import HeroSection from "@/components/sections/HeroSection.astro";
+import DownloadButton from "@/components/common/DownloadButton.astro";
+import FeatureCard from "@/components/cards/FeatureCard.astro";
+import Section from "@/components/sections/Section.astro";
+import ValueCard from "@/components/cards/ValueCard.astro";
+import RatingsSummary from "@/components/cards/RatingsSummary.astro";
+import FeatureIconGrid from "@/components/sections/FeatureIconGrid.astro";
+import { FaqSection } from "@/components/sections/FaqSection";
+import { ReviewsCarousel } from "@/components/sections/ReviewsCarousel";
+import { site } from "@/site.config";
+import { formatHomePageTitle } from "@/lib/page-title";
+import { Card, CardContent } from "@/components/ui/card";
+import {
+  Bell,
+  CalendarDays,
+  Cloud,
+  FileText,
+  Focus,
+  FolderOpen,
+  Lock,
+  Search,
+  WifiOff,
+} from "lucide-react";
+import placeholderImage from "@/assets/screenshots/placeholder.png";
+
+const downloadUrl = site.downloadURL;
+
+// Fictional placeholder content that initialization replaces for the target app.
+const testimonials = [
+  {
+    quote:
+      "Orbit gives me one calm view of the day instead of another complicated system to maintain.",
+    author: "Maya R.",
+  },
+  {
+    quote:
+      "I capture an idea on my phone and it is waiting on my Mac when I sit down to work.",
+    author: "Jonas K.",
+  },
+  {
+    quote:
+      "The weekly view makes it obvious what deserves my attention and what can wait.",
+    author: "Elena P.",
+  },
+  {
+    quote:
+      "Fast, thoughtful, and refreshingly quiet. It has become part of my morning routine.",
+    author: "Noah T.",
+  },
+  {
+    quote: "Exactly enough structure without getting in my way.",
+    author: "Priya S.",
+  },
+  {
+    quote:
+      "I planned a busy launch week in Orbit and could finally see the breathing room between deadlines.",
+    author: "Leo M.",
+  },
+  {
+    quote: "Simple, quick, and genuinely pleasant to use.",
+    author: "Avery C.",
+  },
+  {
+    quote:
+      "The gentle reminders help me follow through without making every task feel urgent.",
+    author: "Samira D.",
+  },
+];
+
+const featureIcons = [
+  {
+    title: "Quick capture",
+    description: "Save a thought before it disappears.",
+    icon: FileText,
+  },
+  {
+    title: "Flexible projects",
+    description: "Keep work and personal plans organized.",
+    icon: FolderOpen,
+  },
+  {
+    title: "Gentle reminders",
+    description: "Get a nudge without notification overload.",
+    icon: Bell,
+  },
+  {
+    title: "Works offline",
+    description: "Plan anywhere and sync changes later.",
+    icon: WifiOff,
+  },
+  {
+    title: "Flexible views",
+    description: "Move between today and the week ahead.",
+    icon: CalendarDays,
+  },
+  {
+    title: "Fast search",
+    description: "Find any task, note, or project in seconds.",
+    icon: Search,
+  },
+];
+
+const faq = [
+  {
+    question: "Is Orbit free to try?",
+    answer:
+      "Yes. The fictional demo app includes a free starter plan, with optional upgrades shown before purchase.",
+  },
+  {
+    question: "Which devices does it support?",
+    answer:
+      "This demo supports iPhone, iPad, and Mac, with changes kept in sync across devices.",
+  },
+  {
+    question: "Can I use it without an internet connection?",
+    answer:
+      "Yes. Your plans remain available offline and synchronize when a connection returns.",
+  },
+];
+---
+
+<Layout
+  title={formatHomePageTitle()}
+  description={site.home.metaDescription ?? site.description}
+>
+  <main class="xs:gap-30 mx-auto flex w-full max-w-5xl min-w-0 flex-col gap-20">
+    <HeroSection
+      headline={site.home.headline}
+      tagline={site.home.tagline}
+      layout="horizontal"
+      image={placeholderImage}
+      alt={`Dashboard preview of the fictional ${site.name} app`}
+    >
+      <div slot="actions" class="flex flex-wrap items-center gap-3">
+        <DownloadButton href={downloadUrl} label="Download the app" />
+      </div>
+    </HeroSection>
+
+    <Section id="features" title="A calmer way to shape your day">
+      <div
+        class="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-3 lg:gap-12"
+      >
+        <FeatureCard
+          title="See the day clearly"
+          description="Turn a busy list into a realistic plan with room to breathe."
+          image={placeholderImage}
+          imagePreset="inset"
+        />
+        <FeatureCard
+          title="Notice your momentum"
+          description="Simple progress insights show what is moving without turning work into a scoreboard."
+          image={placeholderImage}
+          imagePreset="inset"
+        />
+        <FeatureCard
+          title="Keep everything close"
+          description="Capture tasks, notes, and projects in one focused workspace."
+          image={placeholderImage}
+          imagePreset="focus-top"
+        />
+      </div>
+    </Section>
+
+    <Section aria-label="Product values">
+      <Card>
+        <CardContent>
+          <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+            <ValueCard
+              title="Private by default"
+              description="Your plans stay yours, with no advertising profiles or attention tracking."
+              icon={Lock}
+            />
+            <ValueCard
+              title="In sync"
+              description="Pick up on any supported device without managing files or exports."
+              icon={Cloud}
+            />
+            <ValueCard
+              title="Designed for focus"
+              description="A quiet interface keeps the next meaningful action within reach."
+              icon={Focus}
+            />
+          </div>
+        </CardContent>
+      </Card>
+    </Section>
+
+    <FeatureIconGrid
+      title="The essentials, thoughtfully covered"
+      items={featureIcons}
+    />
+
+    <Section title="Loved by people with full days">
+      <ReviewsCarousel testimonials={testimonials} client:visible />
+      {
+        site.rating && (
+          <RatingsSummary class="mx-auto mt-12" rating={site.rating} />
+        )
+      }
+    </Section>
+
+    <Section id="faq" title="Good to know">
+      <FaqSection items={faq} client:visible />
+    </Section>
+
+    <div id="download">
+      <DownloadCta
+        href={downloadUrl}
+        appName={site.name}
+        headline="Make space for what matters today."
+        buttonLabel="Download"
+        footnote="Orbit is a fictional demo app. Replace this content during initialization."
+      />
+    </div>
+  </main>
+</Layout>

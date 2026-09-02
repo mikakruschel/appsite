@@ -1,0 +1,125 @@
+---
+import Laurel from "@/components/common/Laurel.astro";
+import Star from "@/components/common/Star.astro";
+import { cn } from "@/lib/utils";
+import type { SiteConfig } from "@/lib/site.types";
+
+interface Props {
+  rating: NonNullable<SiteConfig["rating"]>;
+  class?: string;
+}
+
+const { rating, class: className } = Astro.props;
+
+const label = "Average rating";
+const formattedScore = rating.average.toFixed(1);
+const formattedRatingCount = new Intl.NumberFormat("en", {
+  notation: "compact",
+  compactDisplay: "short",
+}).format(rating.count);
+const ratings = `${formattedRatingCount} Ratings`;
+
+function starFills(rating: number): number[] {
+  return Array.from({ length: 5 }, (_, index) => {
+    const fill = Math.min(1, Math.max(0, rating - index));
+    return Math.round(fill * 100);
+  });
+}
+
+const fills = starFills(rating.average);
+const starSize = "size-6 xs:size-7";
+---
+
+<div
+  class={cn("flex w-fit items-center gap-4", className)}
+  role="img"
+  aria-label={`${formattedScore} ${label} from ${ratings}`}
+  data-star-animate
+>
+  <Laurel class="text-accent-muted h-25 w-10" />
+
+  <div class="xs:gap-3 flex flex-col items-center gap-2">
+    <div class="flex gap-1.5" aria-hidden="true">
+      {
+        fills.map((fill, index) => (
+          <span class={cn("relative block", starSize)}>
+            <Star class="text-label-secondary-icon absolute inset-0 size-full" />
+            <span
+              class="absolute inset-0 block overflow-hidden"
+              data-star-fill
+              data-fill={fill}
+              style={`--star-fill-width: ${fill}%; --star-index: ${index}`}
+            >
+              <Star class={cn("text-accent", starSize)} />
+            </span>
+          </span>
+        ))
+      }
+    </div>
+
+    <p class="xs:text-2xl text-xl leading-tight font-bold tracking-tight">
+      {formattedScore}{" "}
+      {label}
+    </p>
+    <p class="text-label-secondary -mt-1 text-base font-medium">
+      {ratings}
+    </p>
+  </div>
+
+  <Laurel class="text-accent-muted h-25 w-10 -scale-x-100" />
+</div>
+
+<style>
+  [data-star-fill] {
+    width: var(--star-fill-width);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* 1s total (200ms pause + 5 × 160ms) */
+    [data-star-fill] {
+      width: 0 !important;
+      --star-fill-duration: 160ms;
+      transition: width var(--star-fill-duration) ease-out;
+      transition-delay: 0ms;
+    }
+
+    .is-revealed [data-star-fill] {
+      width: var(--star-fill-width) !important;
+      transition-delay: calc(
+        200ms + var(--star-index, 0) * var(--star-fill-duration)
+      );
+    }
+
+    .is-revealed [data-star-fill][data-fill="0"] {
+      width: 0 !important;
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  const prefersReducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  const containers = document.querySelectorAll<HTMLElement>(
+    "[data-star-animate]",
+  );
+
+  if (prefersReducedMotion || containers.length === 0) {
+    containers.forEach((element) => element.classList.add("is-revealed"));
+  } else {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("is-revealed");
+          observer.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -8% 0px", threshold: 0.1 },
+    );
+
+    containers.forEach((element) => observer.observe(element));
+  }
+</script>

@@ -1,0 +1,133 @@
+---
+import { Image } from "astro:assets";
+import type { ImageMetadata } from "astro";
+
+type ImagePreset = "focus-top" | "focus-bottom" | "inset" | "fill";
+type ImageFit = "cover" | "contain";
+type ImagePadding =
+  | number
+  | Partial<{
+      top: number;
+      right: number;
+      bottom: number;
+      left: number;
+    }>;
+
+type ResolvedImagePadding = {
+  top: number;
+  right: number;
+  bottom: number;
+  left: number;
+};
+
+interface Props {
+  title: string;
+  description: string;
+  image: ImageMetadata;
+  imagePreset?: ImagePreset;
+  imagePadding?: ImagePadding;
+  imageFit?: ImageFit;
+}
+
+const {
+  title,
+  description,
+  image,
+  imagePreset = "focus-bottom",
+  imagePadding,
+  imageFit,
+} = Astro.props;
+
+const imagePresetConfig: Record<
+  ImagePreset,
+  {
+    padding: ResolvedImagePadding;
+    fit: ImageFit;
+    position: string;
+  }
+> = {
+  "focus-top": {
+    padding: { top: 10, right: 12, bottom: 0, left: 12 },
+    fit: "cover",
+    position: "center top",
+  },
+  "focus-bottom": {
+    padding: { top: 0, right: 12, bottom: 10, left: 12 },
+    fit: "cover",
+    position: "center bottom",
+  },
+  inset: {
+    padding: { top: 11, right: 11, bottom: 11, left: 11 },
+    fit: "contain",
+    position: "center center",
+  },
+  fill: {
+    padding: { top: 0, right: 0, bottom: 0, left: 0 },
+    fit: "cover",
+    position: "center center",
+  },
+};
+
+const imagePresetConfigForCard = imagePresetConfig[imagePreset];
+const resolvedFit = imageFit ?? imagePresetConfigForCard.fit;
+const defaultPadding = imagePresetConfigForCard.padding;
+const resolvedPadding =
+  typeof imagePadding === "number"
+    ? {
+        top: imagePadding,
+        right: imagePadding,
+        bottom: imagePadding,
+        left: imagePadding,
+      }
+    : {
+        ...defaultPadding,
+        ...imagePadding,
+      };
+
+const imageStyle = [
+  `--feature-image-top: ${resolvedPadding.top}%`,
+  `--feature-image-right: ${resolvedPadding.right}%`,
+  `--feature-image-bottom: ${resolvedPadding.bottom}%`,
+  `--feature-image-left: ${resolvedPadding.left}%`,
+  `--feature-image-fit: ${resolvedFit}`,
+  `--feature-image-position: ${imagePresetConfigForCard.position}`,
+].join("; ");
+---
+
+<div class="flex flex-col items-center text-center">
+  <div
+    class="rounded-card from-background via-accent-faint to-accent-subtle ring-label/5 dark:ring-label/10 relative aspect-square h-auto w-full overflow-hidden bg-linear-to-br ring-1"
+    style={imageStyle}
+  >
+    <div class="feature-image-slot">
+      <Image
+        src={image}
+        alt=""
+        aria-hidden="true"
+        width={image.width}
+        height={image.height}
+        densities={[1, 2]}
+        loading="lazy"
+        decoding="async"
+        class="h-full w-full drop-shadow-xl"
+        style="object-fit: var(--feature-image-fit); object-position: var(--feature-image-position);"
+      />
+    </div>
+  </div>
+  <h3 class="mt-4 text-lg leading-tight font-bold tracking-tight">
+    {title}
+  </h3>
+  <p class="xs:mt-2 text-label-secondary max-w-xs text-base leading-relaxed">
+    {description}
+  </p>
+</div>
+
+<style>
+  .feature-image-slot {
+    position: absolute;
+    top: var(--feature-image-top);
+    right: var(--feature-image-right);
+    bottom: var(--feature-image-bottom);
+    left: var(--feature-image-left);
+  }
+</style>

@@ -1,0 +1,171 @@
+<div class="markdown max-w-full text-pretty">
+  <slot />
+</div>
+
+<style>
+  @reference "../../styles/global.css";
+
+  .markdown {
+    @apply space-y-4 text-base leading-[1.6] text-pretty;
+  }
+
+  .markdown :global(h1) {
+    @apply text-3xl leading-tight font-semibold text-balance sm:text-4xl;
+  }
+
+  .markdown :global(h2) {
+    @apply pt-6 text-2xl leading-[1.5] font-semibold text-balance;
+  }
+
+  .markdown :global(h3) {
+    @apply pt-2 text-base leading-[1.5] font-semibold text-balance;
+  }
+
+  .markdown :global(h4) {
+    @apply pt-2 text-sm leading-[1.5] font-semibold text-balance;
+  }
+
+  .markdown :global(h5),
+  .markdown :global(h6) {
+    @apply pt-2 text-sm leading-[1.5] font-medium text-balance;
+  }
+
+  .markdown :global(a) {
+    @apply text-label hover:text-accent underline underline-offset-3 transition-colors;
+  }
+
+  .markdown :global(strong) {
+    @apply font-semibold;
+  }
+
+  .markdown :global(em) {
+    @apply italic;
+  }
+
+  .markdown :global(s) {
+    @apply line-through;
+  }
+
+  .markdown :global(ul) {
+    @apply list-disc space-y-2 pl-6;
+  }
+
+  .markdown :global(ol) {
+    @apply list-decimal space-y-2 pl-6;
+  }
+
+  .markdown :global(li) {
+    @apply pl-1;
+  }
+
+  .markdown :global(li > ul),
+  .markdown :global(li > ol) {
+    @apply mt-2;
+  }
+
+  .markdown :global(li > p) {
+    @apply my-2;
+  }
+
+  .markdown :global(input[type="checkbox"]) {
+    @apply accent-accent mr-2 size-4 align-middle;
+  }
+
+  .markdown :global(blockquote) {
+    @apply border-border text-label-secondary border-l-2 pl-4 italic;
+  }
+
+  .markdown :global(blockquote p) {
+    @apply my-0;
+  }
+
+  .markdown :global(code) {
+    @apply bg-card rounded px-1.5 py-0.5 text-sm;
+  }
+
+  .markdown :global(pre) {
+    @apply bg-card overflow-x-auto rounded-lg p-4;
+  }
+
+  .markdown :global(pre code) {
+    @apply bg-transparent p-0;
+  }
+
+  .markdown :global(kbd) {
+    @apply border-border bg-card rounded border px-1.5 py-0.5 font-mono text-xs font-medium;
+  }
+
+  .markdown :global(hr) {
+    @apply border-border my-8 border-t;
+  }
+
+  .markdown :global(img),
+  .markdown :global(video) {
+    @apply h-auto max-w-full rounded-lg;
+  }
+
+  .markdown :global(figure) {
+    @apply space-y-2;
+  }
+
+  .markdown :global(figcaption) {
+    @apply text-label-secondary text-sm;
+  }
+
+  .markdown :global(table) {
+    @apply w-full border-collapse text-sm;
+  }
+
+  .markdown :global(thead) {
+    @apply border-border border-b;
+  }
+
+  .markdown :global(tr) {
+    @apply border-border border-b;
+  }
+
+  .markdown :global(th) {
+    @apply px-3 py-2 text-left font-semibold;
+  }
+
+  .markdown :global(td) {
+    @apply px-3 py-2 align-top;
+  }
+
+  .markdown :global(dl) {
+    @apply space-y-3;
+  }
+
+  .markdown :global(dt) {
+    @apply font-semibold;
+  }
+
+  .markdown :global(dd) {
+    @apply text-label-secondary pl-4;
+  }
+
+  .markdown :global(sup),
+  .markdown :global(sub) {
+    @apply text-xs leading-none;
+  }
+
+  .markdown :global(mark) {
+    @apply bg-accent-subtle text-label rounded px-1;
+  }
+
+  .markdown :global(details) {
+    @apply border-border rounded-lg border px-4 py-3;
+  }
+
+  .markdown :global(summary) {
+    @apply cursor-pointer font-medium;
+  }
+
+  .markdown :global(details > :not(summary)) {
+    @apply mt-3;
+  }
+
+  .markdown :global(.footnotes) {
+    @apply border-border text-label-secondary mt-10 border-t pt-6 text-sm;
+  }
+</style>

@@ -1,0 +1,48 @@
+---
+layout: ../layouts/MarkdownPageLayout.astro
+title: Privacy Policy
+description: Privacy policy.
+---
+
+import { site } from "@/site.config";
+
+export const appName = site.name;
+export const developer = site.developer ?? site.name;
+export const contactEmail = site.contactEmail;
+
+{appName} is created and maintained by {developer}.
+
+## Personally-identifying information
+
+{appName} does not gather or transmit any personally-identifying information.
+
+Syncing is handled securely through your iCloud account. Downloads and payments are handled by Apple through the App Store. [Apple's Privacy Policy](https://www.apple.com/legal/privacy/) applies to data handled by Apple.
+
+## Analytics
+
+{appName} uses [TelemetryDeck](https://telemetrydeck.com), a privacy-first analytics service that collects anonymous usage data to help guide development. It is designed not to identify individual users. See [TelemetryDeck's privacy information](https://telemetrydeck.com/privacy/).
+
+## Payment data
+
+In-app purchases are managed with [RevenueCat](https://www.revenuecat.com). If you make a purchase, RevenueCat receives a receipt about that purchase. It does not receive or process your payment details, such as a credit card number. See [RevenueCat's Privacy Policy](https://www.revenuecat.com/privacy).
+
+## Email support
+
+{contactEmail ? (
+
+  <p>
+    You can contact me at <a href={`mailto:${contactEmail}`}>{contactEmail}</a>. Any
+    information you share this way will be kept confidential and not shared with third
+    parties outside of the email provider used to receive it.
+  </p>
+) : (
+  <p>
+    You can contact me through the channels listed on this site. Any information you
+    share this way will be kept confidential and not shared with third parties outside
+    of the email provider used to receive it.
+  </p>
+)}
+
+## Privacy policy changes
+
+{appName} may change this privacy policy from time to time. Continued use of the app after any change will constitute your acceptance of such change, to the extent permitted by law.

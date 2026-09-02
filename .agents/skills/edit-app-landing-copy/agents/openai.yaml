@@ -1,0 +1,4 @@
+interface:
+  display_name: "Edit App Landing Copy"
+  short_description: "Polish app landing copy without new claims"
+  default_prompt: "Use $edit-app-landing-copy to polish the app landing-page copy while preserving verified claims."

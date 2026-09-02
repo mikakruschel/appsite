@@ -1,0 +1,4 @@
+interface:
+  display_name: "Initialize App Landing Page"
+  short_description: "Research, write, build, and review an app site"
+  default_prompt: "Use $initialize-app-landing-page to initialize this template for my app from the sources I provide."

@@ -1,0 +1,44 @@
+---
+import { cn } from "@/lib/utils";
+
+interface Props {
+  title?: string;
+  id?: string;
+  "aria-label"?: string;
+  class?: string;
+}
+
+const { title, id, class: className } = Astro.props;
+const ariaLabel = Astro.props["aria-label"];
+
+function titleSlug(value: string): string {
+  return value
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+const titleId = title ? (id ? `${id}-title` : titleSlug(title)) : undefined;
+---
+
+<section
+  id={id}
+  class={cn("px-5", className)}
+  aria-labelledby={titleId}
+  aria-label={title ? undefined : ariaLabel}
+>
+  {
+    title && (
+      <div class="xs:mb-10 mb-5 max-w-2xl">
+        <h2
+          id={titleId}
+          class="text-3xl leading-tight font-bold tracking-tight"
+        >
+          {title}
+        </h2>
+      </div>
+    )
+  }
+  <slot />
+</section>

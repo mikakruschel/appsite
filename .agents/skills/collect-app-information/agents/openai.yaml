@@ -1,0 +1,4 @@
+interface:
+  display_name: "Collect App Information"
+  short_description: "Create a verified brief from available app sources"
+  default_prompt: "Use $collect-app-information to collect and verify the information needed for this app landing page."

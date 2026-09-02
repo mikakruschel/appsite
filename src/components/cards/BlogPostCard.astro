@@ -1,0 +1,51 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { title, description, date, coverImage } = post.data;
+const href = `/blog/${post.id}/`;
+
+const formattedDate = date.toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<a
+  href={href}
+  class="group border-border hover:border-border block border-b py-8 transition-colors first:pt-0 last:border-b-0"
+>
+  {
+    coverImage && (
+      <div class="rounded-card ring-label/5 dark:ring-label/10 mb-4 aspect-[16/9] w-full overflow-hidden ring-1">
+        <Image
+          src={coverImage}
+          alt=""
+          width={coverImage.width}
+          height={coverImage.height}
+          densities={[1, 2]}
+          loading="lazy"
+          decoding="async"
+          class="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.01]"
+        />
+      </div>
+    )
+  }
+  <time datetime={date.toISOString()} class="text-label-secondary text-sm">
+    {formattedDate}
+  </time>
+  <h2
+    class="group-hover:text-accent mt-1 text-lg leading-tight font-semibold tracking-tight transition-colors"
+  >
+    {title}
+  </h2>
+  <p class="text-label-secondary mt-2 text-base leading-relaxed">
+    {description}
+  </p>
+</a>

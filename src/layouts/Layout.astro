@@ -1,0 +1,66 @@
+---
+import "@/styles/global.css";
+import icon from "@/assets/app/placeholder-app-icon.png";
+import SpriteSheet from "@/components/icons/SpriteSheet.astro";
+import Head from "@/components/site/Head.astro";
+import ThemeStyles from "@/components/site/ThemeStyles.astro";
+import NavBar from "@/components/site/NavBar.astro";
+import Footer from "@/components/site/Footer.astro";
+import { site } from "@/site.config";
+import type { RssFeed } from "@/lib/rss";
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  feeds?: RssFeed[];
+  ogType?: "website" | "article";
+  publishedTime?: Date;
+}
+
+const { title, description, image, feeds, ogType, publishedTime } = Astro.props;
+
+const navLinks = site.nav ?? [];
+const footerLinks = site.footer ?? [];
+const socialLinks = site.social ?? [];
+const showFooter = Boolean(
+  site.developer || footerLinks.length || socialLinks.length,
+);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <Head
+      title={title}
+      description={description}
+      image={image}
+      icon={icon.src}
+      feeds={feeds}
+      ogType={ogType}
+      publishedTime={publishedTime}
+    />
+    <ThemeStyles />
+  </head>
+  <body class="flex min-h-screen flex-col">
+    <SpriteSheet />
+    <NavBar
+      appName={site.name}
+      downloadUrl={site.downloadURL}
+      navLinks={navLinks}
+    />
+    <div class="mt-21 flex flex-1 flex-col">
+      <slot />
+    </div>
+    {
+      showFooter && (
+        <Footer
+          developer={site.developer}
+          developerWebsite={site.developerWebsite}
+          links={footerLinks}
+          socialLinks={socialLinks}
+        />
+      )
+    }
+  </body>
+</html>

@@ -1,0 +1,79 @@
+---
+import SocialLinks from "@/components/common/SocialLinks.astro";
+import type { SocialLink } from "@/lib/site.types";
+
+type FooterLink = {
+  label: string;
+  href: string;
+};
+
+interface Props {
+  developer?: string;
+  developerWebsite?: string;
+  links?: FooterLink[];
+  socialLinks?: SocialLink[];
+}
+
+const {
+  developer,
+  developerWebsite,
+  links = [],
+  socialLinks = [],
+} = Astro.props;
+
+const year = new Date().getFullYear();
+---
+
+<footer
+  class="mx-auto flex w-full max-w-5xl flex-col items-center gap-6 px-5 pt-20 pb-10 text-center"
+>
+  {socialLinks.length > 0 && <SocialLinks links={socialLinks} grouped />}
+
+  {
+    links.length > 0 && (
+      <nav aria-label="Legal and contact links">
+        <ul class="flex flex-wrap items-center justify-center gap-x-2 gap-y-2">
+          {links.map((link, i) => (
+            <>
+              {i > 0 && (
+                <li
+                  class="text-label-secondary text-sm select-none"
+                  aria-hidden="true"
+                >
+                  •
+                </li>
+              )}
+              <li>
+                <a
+                  href={link.href}
+                  class="inline-flex items-center text-sm font-medium transition-opacity hover:opacity-50"
+                >
+                  {link.label}
+                </a>
+              </li>
+            </>
+          ))}
+        </ul>
+      </nav>
+    )
+  }
+
+  {
+    developer && (
+      <p class="text-label-secondary text-sm">
+        Copyright © {year}{" "}
+        {developerWebsite ? (
+          <a
+            href={developerWebsite}
+            class="font-medium underline transition-opacity hover:opacity-50"
+          >
+            {developer}
+          </a>
+        ) : (
+          developer
+        )}
+        . All rights reserved.
+      </p>
+    )
+  }
+</footer>

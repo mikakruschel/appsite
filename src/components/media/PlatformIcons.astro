@@ -1,0 +1,65 @@
+---
+import type { ApplePlatform } from "@/lib/site.types";
+import AppleWatchIcon from "@/assets/icons/platforms/applewatch.svg";
+import IPhoneIcon from "@/assets/icons/platforms/iphone.svg";
+import IPadIcon from "@/assets/icons/platforms/ipad.svg";
+import MacBookIcon from "@/assets/icons/platforms/macbook.svg";
+import TvIcon from "@/assets/icons/platforms/tv.svg";
+import VisionProIcon from "@/assets/icons/platforms/vision.svg";
+import { cn } from "@/lib/utils";
+
+interface Props {
+  platforms: ApplePlatform[];
+  class?: string;
+}
+
+const { platforms, class: className = "" } = Astro.props;
+
+const iconClass = "text-label-secondary";
+
+const platformIcons = {
+  iphone: IPhoneIcon,
+  ipad: IPadIcon,
+  mac: MacBookIcon,
+  watch: AppleWatchIcon,
+  vision: VisionProIcon,
+  tv: TvIcon,
+} satisfies Record<ApplePlatform, typeof IPhoneIcon>;
+
+const symbolScale = 44 / 24;
+
+const platformIconSizes = {
+  iphone: { width: 12.9102, height: 20.6934 },
+  ipad: { width: 16.6797, height: 22.0215 },
+  mac: { width: 28.5254, height: 15.9082 },
+  watch: { width: 14.7266, height: 20.9082 },
+  vision: { width: 28.0469, height: 15.752 },
+  tv: { width: 24.7754, height: 19.541 },
+} satisfies Record<ApplePlatform, { width: number; height: number }>;
+---
+
+<div
+  class={cn(
+    "mx-auto flex flex-wrap items-center justify-center gap-x-7 gap-y-4 [--icon-scale:0.85] max-sm:gap-x-5 max-sm:gap-y-3 sm:[--icon-scale:1]",
+    className,
+  )}
+  aria-label="Supported platforms"
+>
+  {
+    platforms.map((platform) => {
+      const Icon = platformIcons[platform];
+      const iconSize = platformIconSizes[platform];
+
+      return (
+        <Icon
+          class={iconClass}
+          style={`width: calc(${iconSize.width * symbolScale}px * var(--icon-scale)); height: calc(${
+            iconSize.height * symbolScale
+          }px * var(--icon-scale));`}
+          aria-hidden="true"
+          focusable="false"
+        />
+      );
+    })
+  }
+</div>

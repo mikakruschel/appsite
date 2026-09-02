@@ -1,0 +1,81 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+
+@custom-variant dark (@media (prefers-color-scheme: dark));
+
+@theme inline {
+  --breakpoint-xs: 30rem; /* 480px */
+  --font-sans: "Inter Variable", sans-serif;
+  --font-heading: var(--font-sans);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-label-secondary: var(--label-secondary);
+  --color-accent-label: var(--accent-label);
+  --color-accent: var(--accent);
+  --color-card: var(--card);
+  --color-label: var(--label);
+  --color-background: var(--background);
+  --color-glass: var(--glass);
+  --color-glass-blur: var(--glass-blur);
+  --color-glass-border: var(--glass-border);
+  --color-accent-muted: var(--accent-muted);
+  --color-accent-subtle: var(--accent-subtle);
+  --color-accent-faint: var(--accent-faint);
+  --color-label-secondary-icon: var(--label-secondary-icon);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+  --radius-card: min(var(--radius-4xl), 24px);
+}
+
+:root {
+  --radius: 0.625rem;
+
+  /* ── Derived — auto-track theme tokens from site.config.ts ── */
+  --border: color-mix(in oklch, var(--label) 10%, var(--background));
+  --input: color-mix(in oklch, var(--label) 14%, var(--background));
+  --ring: var(--accent);
+  --glass: oklch(from var(--card) l c h / 70%);
+  --glass-blur: oklch(from var(--card) l c h / 60%);
+  --glass-border: oklch(from var(--border) l c h / 60%);
+  --accent-muted: oklch(from var(--accent) l c h / 45%);
+  --accent-subtle: oklch(from var(--accent) l c h / 15%);
+  --accent-faint: oklch(from var(--accent) l c h / 5%);
+  --label-secondary-icon: oklch(from var(--label-secondary) l c h / 45%);
+  --shadow-elev-sm:
+    0 1px 2px oklch(0 0 0 / 4%), inset 0 1px 0 oklch(1 0 0 / 10%);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --shadow-elev-sm:
+      0 1px 2px oklch(0 0 0 / 20%), inset 0 1px 0 oklch(1 0 0 / 6%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  html {
+    @apply scroll-pt-22 font-sans motion-safe:scroll-smooth;
+  }
+
+  body {
+    @apply bg-background text-label antialiased;
+  }
+
+  a:focus-visible,
+  summary:focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+}

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Review App Changelog"
+  short_description: "Clean imported App Store changelog entries"
+  default_prompt: "Use $review-app-changelog to review unreviewed imported App Store changelog entries against the named artifact."

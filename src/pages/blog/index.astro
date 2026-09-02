@@ -1,0 +1,42 @@
+---
+import BlogPostCard from "@/components/cards/BlogPostCard.astro";
+import RssSubscribeLink from "@/components/common/RssSubscribeLink.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getBlogPosts } from "@/lib/collections";
+import { formatPageTitle } from "@/lib/page-title";
+import { site } from "@/site.config";
+import { blogRssFeed } from "@/lib/rss";
+
+const posts = await getBlogPosts();
+---
+
+<Layout
+  title={formatPageTitle("Blog")}
+  description={`Blog posts from ${site.name}.`}
+  feeds={[blogRssFeed]}
+>
+  <main class="xs:py-20 mx-auto w-full max-w-3xl px-5 py-7">
+    <header class="mb-8">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <h1
+          class="text-3xl leading-tight font-semibold text-balance sm:text-4xl"
+        >
+          Blog
+        </h1>
+        <RssSubscribeLink feed={blogRssFeed} />
+      </div>
+    </header>
+
+    {
+      posts.length > 0 ? (
+        <div>
+          {posts.map((post) => (
+            <BlogPostCard post={post} />
+          ))}
+        </div>
+      ) : (
+        <p class="text-label-secondary">No posts yet. Check back soon.</p>
+      )
+    }
+  </main>
+</Layout>
