@@ -40,46 +40,134 @@ const currentPath = Astro.url.pathname;
 >
   <nav
     data-nav
-    class="navbar-shadow bg-glass supports-backdrop-filter:bg-glass-blur ring-label/5 dark:ring-label/10 pointer-events-auto flex w-fit max-w-full min-w-0 items-center gap-5 rounded-full py-2 pr-2 pl-3.5 ring-1 backdrop-blur-xl md:gap-10 md:py-3 md:pr-3 md:pl-5"
+    class="navbar-shadow bg-glass supports-backdrop-filter:bg-glass-blur ring-label/5 dark:ring-label/10 pointer-events-auto w-fit max-w-full min-w-0 rounded-[1.75rem] py-2 pr-2 pl-3.5 ring-1 backdrop-blur-xl md:py-3 md:pr-3 md:pl-5"
     aria-label="Site"
   >
-    <a
-      href="/"
-      aria-label={`Go to ${appName} home`}
-      class="flex shrink-0 items-center gap-2.5"
-    >
-      <AppIcon alt={`${appName} app icon`} size="nav" priority />
-      <span class="text-base leading-none font-bold">{appName}</span>
-    </a>
+    <div data-nav-bar class="flex min-w-0 items-center gap-5 md:gap-10">
+      <a
+        href="/"
+        aria-label={`Go to ${appName} home`}
+        class="flex shrink-0 items-center gap-2.5"
+      >
+        <AppIcon alt={`${appName} app icon`} size="nav" priority />
+        <span class="text-base leading-none font-bold">{appName}</span>
+      </a>
+
+      {
+        navLinks.length > 0 && (
+          <div class="nav-expandable flex shrink-0 items-center gap-3 md:gap-4">
+            {navLinks.map((link) => {
+              const isActive = isNavLinkActive(link.href, currentPath);
+
+              return (
+                <a
+                  href={link.href}
+                  class:list={[
+                    "flex h-9 items-center text-[15px] leading-none font-medium transition-colors",
+                    isActive
+                      ? "text-label"
+                      : "text-label-secondary hover:text-label",
+                  ]}
+                  aria-current={isActive ? "page" : undefined}
+                >
+                  {link.label}
+                </a>
+              );
+            })}
+          </div>
+        )
+      }
+
+      <div class="ml-auto flex shrink-0 items-center gap-1">
+        {
+          downloadUrl && (
+            <DownloadButton href={downloadUrl} size="sm" logo={false} />
+          )
+        }
+
+        {
+          navLinks.length > 0 && (
+            <button
+              type="button"
+              data-nav-toggle
+              class="text-label-secondary hover:text-label flex size-10 shrink-0 items-center justify-center rounded-full outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/30"
+              aria-controls="mobile-navbar-menu"
+              aria-expanded="false"
+              aria-label="Open navigation"
+            >
+              <svg
+                data-nav-icon="menu"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M4 5h16"></path>
+                <path d="M4 12h16"></path>
+                <path d="M4 19h16"></path>
+              </svg>
+              <svg
+                data-nav-icon="close"
+                class="hidden"
+                xmlns="http://www.w3.org/2000/svg"
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M18 6 6 18"></path>
+                <path d="m6 6 12 12"></path>
+              </svg>
+            </button>
+          )
+        }
+      </div>
+    </div>
 
     {
       navLinks.length > 0 && (
-        <div class="nav-expandable flex shrink-0 items-center gap-3 md:gap-4">
-          {navLinks.map((link) => {
-            const isActive = isNavLinkActive(link.href, currentPath);
+        <div
+          id="mobile-navbar-menu"
+          data-nav-menu
+          class="grid overflow-hidden"
+          aria-hidden="true"
+          inert
+        >
+          <div class="min-h-0 overflow-hidden">
+            <div class="border-label/10 mt-2 flex flex-col gap-1 border-t pt-3">
+              {navLinks.map((link) => {
+                const isActive = isNavLinkActive(link.href, currentPath);
 
-            return (
-              <a
-                href={link.href}
-                class:list={[
-                  "flex h-9 items-center text-[15px] leading-none font-medium transition-colors",
-                  isActive
-                    ? "text-label"
-                    : "text-label-secondary hover:text-label",
-                ]}
-                aria-current={isActive ? "page" : undefined}
-              >
-                {link.label}
-              </a>
-            );
-          })}
+                return (
+                  <a
+                    href={link.href}
+                    data-nav-mobile-link
+                    class:list={[
+                      "px-3 py-2.5 text-[15px] leading-none font-medium transition-colors",
+                      isActive
+                        ? "text-label"
+                        : "text-label-secondary hover:text-label",
+                    ]}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    {link.label}
+                  </a>
+                );
+              })}
+            </div>
+          </div>
         </div>
-      )
-    }
-
-    {
-      downloadUrl && (
-        <DownloadButton href={downloadUrl} size="sm" logo={false} />
       )
     }
   </nav>
@@ -90,9 +178,36 @@ const currentPath = Astro.url.pathname;
     box-shadow: var(--shadow-elev-sm);
   }
 
+  [data-nav] {
+    --nav-ease: cubic-bezier(0.23, 1, 0.32, 1);
+    transition: padding-bottom 200ms var(--nav-ease);
+  }
+
+  [data-nav-menu] {
+    grid-template-rows: 0fr;
+    margin-top: 0;
+    opacity: 0;
+    transform: translateY(-0.25rem);
+    transition:
+      grid-template-rows 200ms var(--nav-ease),
+      opacity 200ms var(--nav-ease),
+      margin-top 200ms var(--nav-ease),
+      transform 200ms var(--nav-ease);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-nav],
+    [data-nav-menu] {
+      transition: none;
+    }
+  }
+
   @media (max-width: 767px) {
     [data-nav]:not([data-nav-ready]) {
       width: 100%;
+    }
+
+    [data-nav]:not([data-nav-ready]) [data-nav-bar] {
       justify-content: space-between;
     }
 
@@ -101,38 +216,189 @@ const currentPath = Astro.url.pathname;
     }
   }
 
+  @media (min-width: 768px) {
+    [data-nav]:not([data-nav-ready]) [data-nav-toggle] {
+      display: none;
+    }
+  }
+
   [data-nav][data-collapsed="true"] {
     width: 100%;
+  }
+
+  [data-nav][data-collapsed="true"] [data-nav-bar] {
     justify-content: space-between;
   }
 
   [data-nav][data-collapsed="true"] .nav-expandable {
     display: none;
   }
+
+  [data-nav][data-collapsed="false"] [data-nav-toggle],
+  [data-nav][data-collapsed="false"] [data-nav-menu] {
+    display: none;
+  }
+
+  [data-nav][data-open="true"] {
+    padding-bottom: 0.75rem;
+  }
+
+  [data-nav][data-open="true"] [data-nav-menu] {
+    margin-top: 0.25rem;
+    grid-template-rows: 1fr;
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  [data-nav][data-open="true"] [data-nav-icon="menu"] {
+    display: none;
+  }
+
+  [data-nav][data-open="true"] [data-nav-icon="close"] {
+    display: block;
+  }
 </style>
 
 <script is:inline>
-  function updateNavCollapse() {
+  (function () {
     var nav = document.querySelector("[data-nav]");
     if (!nav) return;
 
-    nav.dataset.collapsed = "false";
-    nav.dataset.collapsed =
-      nav.scrollWidth > nav.clientWidth + 1 ? "true" : "false";
-    nav.dataset.navReady = "true";
-  }
+    var bar = nav.querySelector("[data-nav-bar]");
+    var toggle = nav.querySelector("[data-nav-toggle]");
+    var menu = nav.querySelector("[data-nav-menu]");
+    var lastParentWidth = -1;
+    var updating = false;
 
-  updateNavCollapse();
-  window.addEventListener("resize", updateNavCollapse);
-  if (document.fonts && document.fonts.ready) {
-    document.fonts.ready.then(updateNavCollapse);
-  }
-
-  var nav = document.querySelector("[data-nav]");
-  if (nav && "ResizeObserver" in window) {
-    new ResizeObserver(updateNavCollapse).observe(nav);
-    if (nav.parentElement) {
-      new ResizeObserver(updateNavCollapse).observe(nav.parentElement);
+    function parentWidth() {
+      return nav.parentElement
+        ? nav.parentElement.clientWidth
+        : window.innerWidth;
     }
-  }
+
+    function setMenuOpen(open) {
+      if (!toggle || !menu) return;
+
+      if (nav.dataset.collapsed !== "true") {
+        open = false;
+      }
+
+      var focusInside = menu.contains(document.activeElement);
+
+      nav.dataset.open = open ? "true" : "false";
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+      toggle.setAttribute(
+        "aria-label",
+        open ? "Close navigation" : "Open navigation",
+      );
+      menu.setAttribute("aria-hidden", open ? "false" : "true");
+
+      if (open) {
+        menu.removeAttribute("inert");
+      } else {
+        menu.setAttribute("inert", "");
+        if (focusInside) toggle.focus();
+      }
+    }
+
+    function measureCollapse() {
+      nav.dataset.collapsed = "false";
+
+      var overflows = bar
+        ? bar.scrollWidth > bar.clientWidth + 1
+        : nav.scrollWidth > nav.clientWidth + 1;
+
+      nav.dataset.collapsed = overflows ? "true" : "false";
+      nav.dataset.navReady = "true";
+      lastParentWidth = parentWidth();
+    }
+
+    function updateNavCollapse(fromContent) {
+      if (updating) return;
+      updating = true;
+
+      var widthChanged = parentWidth() !== lastParentWidth;
+
+      if (nav.dataset.open === "true") {
+        if (!widthChanged) {
+          updating = false;
+          return;
+        }
+        setMenuOpen(false);
+      } else if (
+        !fromContent &&
+        !widthChanged &&
+        nav.dataset.navReady === "true"
+      ) {
+        updating = false;
+        return;
+      }
+
+      measureCollapse();
+      updating = false;
+    }
+
+    function onPointerDown(event) {
+      if (nav.dataset.open !== "true") return;
+      if (!(event.target instanceof Node)) return;
+      if (nav.contains(event.target)) return;
+      setMenuOpen(false);
+    }
+
+    function onKeyDown(event) {
+      if (event.key === "Escape" && nav.dataset.open === "true") {
+        event.preventDefault();
+        setMenuOpen(false);
+      }
+    }
+
+    if (toggle) {
+      toggle.addEventListener("click", function () {
+        setMenuOpen(nav.dataset.open !== "true");
+      });
+    }
+
+    nav.querySelectorAll("[data-nav-mobile-link]").forEach(function (link) {
+      link.addEventListener("click", function () {
+        setTimeout(function () {
+          setMenuOpen(false);
+        }, 0);
+      });
+    });
+
+    document.addEventListener("pointerdown", onPointerDown);
+    document.addEventListener("keydown", onKeyDown);
+
+    updateNavCollapse();
+    window.addEventListener("resize", function () {
+      updateNavCollapse();
+    });
+
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        updateNavCollapse(true);
+      });
+    }
+
+    nav.querySelectorAll("img").forEach(function (img) {
+      if (img.complete) return;
+      img.addEventListener("load", function () {
+        updateNavCollapse(true);
+      });
+    });
+
+    if ("ResizeObserver" in window) {
+      if (nav.parentElement) {
+        new ResizeObserver(function () {
+          updateNavCollapse();
+        }).observe(nav.parentElement);
+      }
+
+      if (bar) {
+        new ResizeObserver(function () {
+          updateNavCollapse(true);
+        }).observe(bar);
+      }
+    }
+  })();
 </script>
