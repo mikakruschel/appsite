@@ -45,7 +45,7 @@ export type SiteTheme = {
 export type HomeConfig = {
   headline: string;
   tagline: string;
-  /** Overrides `<title>`; defaults to headline when omitted. */
+  /** Overrides `<title>`; defaults to the app name when omitted. */
   pageTitle?: string;
   /** Overrides site description for homepage meta/OG when set. */
   metaDescription?: string;

@@ -5,5 +5,5 @@ export function formatPageTitle(pageTitle: string) {
 }
 
 export function formatHomePageTitle() {
-  return site.home.pageTitle ?? formatPageTitle(site.home.headline);
+  return site.home.pageTitle ?? site.name;
 }
