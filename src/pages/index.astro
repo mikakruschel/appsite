@@ -194,7 +194,7 @@ const faq = [
     />
 
     <Section title="Loved by people with full days">
-      <ReviewsCarousel testimonials={testimonials} client:visible />
+      <ReviewsCarousel testimonials={testimonials} client:load />
       {
         site.rating && (
           <RatingsSummary class="mx-auto mt-12" rating={site.rating} />
