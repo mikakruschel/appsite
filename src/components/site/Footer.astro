@@ -58,22 +58,35 @@ const year = new Date().getFullYear();
     )
   }
 
-  {
-    developer && (
-      <p class="text-label-secondary text-sm">
-        Copyright © {year}{" "}
-        {developerWebsite ? (
-          <a
-            href={developerWebsite}
-            class="font-medium underline transition-opacity hover:opacity-50"
-          >
-            {developer}
-          </a>
-        ) : (
-          developer
-        )}
-        . All rights reserved.
-      </p>
-    )
-  }
+  <div class="flex flex-col items-center gap-1">
+    {
+      developer && (
+        <p class="text-label-secondary text-sm">
+          Copyright © {year}{" "}
+          {developerWebsite ? (
+            <a
+              href={developerWebsite}
+              class="font-medium underline transition-opacity hover:opacity-50"
+            >
+              {developer}
+            </a>
+          ) : (
+            developer
+          )}
+          . All rights reserved.
+        </p>
+      )
+    }
+
+    <p class="text-label-secondary text-sm">
+      Website built with{" "}
+      <a
+        href="https://appsite.kruschel.dev"
+        class="font-medium underline transition-opacity hover:opacity-50"
+      >
+        AppSite
+      </a>
+      .
+    </p>
+  </div>
 </footer>

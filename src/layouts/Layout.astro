@@ -23,9 +23,6 @@ const { title, description, image, feeds, ogType, publishedTime } = Astro.props;
 const navLinks = site.nav ?? [];
 const footerLinks = site.footer ?? [];
 const socialLinks = site.social ?? [];
-const showFooter = Boolean(
-  site.developer || footerLinks.length || socialLinks.length,
-);
 ---
 
 <!doctype html>
@@ -52,15 +49,11 @@ const showFooter = Boolean(
     <div class="mt-21 flex flex-1 flex-col">
       <slot />
     </div>
-    {
-      showFooter && (
-        <Footer
-          developer={site.developer}
-          developerWebsite={site.developerWebsite}
-          links={footerLinks}
-          socialLinks={socialLinks}
-        />
-      )
-    }
+    <Footer
+      developer={site.developer}
+      developerWebsite={site.developerWebsite}
+      links={footerLinks}
+      socialLinks={socialLinks}
+    />
   </body>
 </html>
